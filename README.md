@@ -65,3 +65,7 @@ CREATE TABLE IF NOT EXISTS log (
 0,1433462426,2015-06-05T00:00:26Z,W8SAI-7,W8VFR-10?,36(15/15),0,`,W8SAI-7,/j,39.352833,-84.327333,0.0,132.0,262.0,,,,Yaesu FT1D,In Service,,
 0,1433462452,2015-06-05T00:00:52Z,KS9N-10,W8VFR-1,36(14/15),0,!,KS9N-10,/#,39.821500,-84.890167,,,,,,,>40 APRSmax,,,W1 Digi Omni Richmond
 0,1433462458,2015-06-05T00:00:58Z,KS9N-10,W8VFR-10?,36(15/15),0,!,KS9N-10,/#,39.821500,-84.890167,,,,,,,>40 APRSmax,,,W1 Digi Omni Richmond
+
+## Database
+
+SQLite tutorial here: https://www.sqlitetutorial.net/sqlite-php/connect/
