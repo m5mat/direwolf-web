@@ -9,7 +9,7 @@
     if (!adaptive) {
       $buffer = 4096;
     } else {
-      $buffer = $lines < 2 ? 64 : ($lines < 10 ? 512 : 4096));
+      $buffer = $lines < 2 ? 64 : ($lines < 10 ? 512 : 4096);
     }
 
     // Jump to last character

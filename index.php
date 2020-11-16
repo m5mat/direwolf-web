@@ -10,7 +10,9 @@
     require __DIR__ . '/vendor/autoload.php';
 
     // Require other useful files
-    require __DIR__ . 'tail.php';
+    require __DIR__ . '/tail.php';
+
+    use SQLiteConnection;
 
     // Create a Router
     $router = new \Bramus\Router\Router();
@@ -32,7 +34,7 @@
           <h1>bramus/router</h1>
           <p>Try these routes:<p>
           <ul>
-            <li>/hello/<em>name</em></li>
+            <li>/test-db</li>
             <li>/log</li>
             <li>/blog</li>
             <li>/blog/<em>year</em></li>
@@ -43,9 +45,13 @@
           </ul>';
     });
 
-    // Static route: /hello
-    $router->get('/hello', function () {
-        echo '<h1>bramus/router</h1><p>Visit <code>/hello/<em>name</em></code> to get your Hello World mojo on!</p>';
+    // Static route: /test-db
+    $router->get('/test-db', function () {
+      $pdo = (new SQLiteConnection())->connect();
+      if ($pdo != null)
+        echo 'Connected to the SQLite database successfully!';
+      else
+        echo 'Whoops, could not connect to the SQLite database!';
     });
 
     // Static route: /hello

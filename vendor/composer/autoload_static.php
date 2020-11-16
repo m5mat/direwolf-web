@@ -17,6 +17,7 @@ class ComposerStaticInit990e278e112600d56f35e3676663f43f
     );
 
     public static $classMap = array (
+        'Bramus\\Router\\Router' => __DIR__ . '/..' . '/bramus/router/src/Bramus/Router/Router.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
     );
 
