@@ -55,6 +55,11 @@
           <p><em>Log here...</em></p>';
     });
 
+    // Dynamic route: /log/num_of_lines
+    $router->get('/log/(\d+)', function ($lines) {
+        echo tail('/var/log/direwolf.log', $lines);
+    });
+
     // Dynamic route: /hello/name
     $router->get('/hello/(\w+)', function ($name) {
         echo 'Hello ' . htmlentities($name);
