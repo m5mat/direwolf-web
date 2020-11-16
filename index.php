@@ -9,6 +9,9 @@
     // Require composer autoloader
     require __DIR__ . '/vendor/autoload.php';
 
+    // Require other useful files
+    require __DIR__ . 'tail.php';
+
     // Create a Router
     $router = new \Bramus\Router\Router();
 
