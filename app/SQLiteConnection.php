@@ -1,4 +1,7 @@
 <?php
+
+namespace App;
+
 /**
  * SQLite connnection
  */
@@ -15,7 +18,11 @@ class SQLiteConnection {
      */
     public function connect() {
         if ($this->pdo == null) {
-            $this->pdo = new \PDO("sqlite:" . Config::PATH_TO_SQLITE_FILE);
+	    try {
+                $this->pdo = new \PDO("sqlite:" . Config::PATH_TO_SQLITE_FILE);
+	    } catch (\PDOException $e) {
+		// handle the exception here
+	    }
         }
         return $this->pdo;
     }

@@ -1,5 +1,7 @@
 <?php
 
+namespace App;
+
   function tail($filepath, $lines = 1, $adaptive = true) {
     // Open the file
     $f = @fopen($filepath, "rb");
