@@ -12,7 +12,13 @@ var realtime = L.realtime({
         crossOrigin: true,
         type: 'json'
     }, {
-        interval: 3 * 1000
+        interval: 3 * 1000,
+        removeMissing: true,
+        onEachFeature: function(feature, layer) {
+          layer.bindPopup(function (layer) {
+            return layer.feature.properties.name;
+          });
+        }
     }).addTo(map);
 
 realtime.on('update', function() {
