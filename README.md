@@ -1,5 +1,11 @@
 # direwolf-web
 
+## Installation
+
+ 1. git clone to destination directory
+ 1. Pull in dependencies `composer update` or `php composer.phar update`.
+ 1. Start the server `./start-server.sh` or `start-server.bat`
+
 ## Log format
 
  1. Radio Channel
