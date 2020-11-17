@@ -31,8 +31,36 @@ function loadLogs(fromId) {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      lastId = parseInt(this.responseText.split(",")[0]);
-      document.getElementById("log").innerHTML += this.responseText;
+      if ( this.responseText.length > 2 ) {
+        var logs = JSON.parse(this.responseText);
+        for ( var log of logs ) {
+          lastId = parseInt(log.id);
+          var date = new Date(log.timestamp * 1000);
+          var row = document.getElementById("log").insertRow(0);
+	  row.insertCell(0).innerHTML = log.id;
+          row.insertCell(1).innerHTML = log.channel;
+          row.insertCell(2).innerHTML = date.toISOString();
+          row.insertCell(3).innerHTML = log.source;
+          row.insertCell(4).innerHTML = log.heard;
+          row.insertCell(5).innerHTML = log.audio_level;
+          row.insertCell(6).innerHTML = log.error;
+          row.insertCell(7).innerHTML = log.dti;
+          row.insertCell(8).innerHTML = log.object_name;
+          row.insertCell(9).innerHTML = log.symbol;
+          row.insertCell(10).innerHTML = log.latitude;
+          row.insertCell(11).innerHTML = log.longitude;
+          row.insertCell(12).innerHTML = log.speed;
+          row.insertCell(13).innerHTML = log.course;
+          row.insertCell(14).innerHTML = log.altitude;
+          row.insertCell(15).innerHTML = log.frequency;
+          row.insertCell(16).innerHTML = log.offset;
+          row.insertCell(17).innerHTML = log.tone;
+          row.insertCell(18).innerHTML = log.system;
+          row.insertCell(19).innerHTML = log.status;
+          row.insertCell(20).innerHTML = log.telemetry;
+          row.insertCell(21).innerHTML = log.comment;
+        }
+      }
     }
   };
   xhttp.open("GET", "/log/" + fromId, true);

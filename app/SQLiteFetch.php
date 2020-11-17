@@ -25,7 +25,7 @@ class SQLiteFetch {
         $sql = 'SELECT id, channel, timestamp, source, heard, audio_level,
           			error, dti, object_name, symbol, latitude, longitude,
           			speed, course, altitude, frequency, offset, tone,
-          			system, status, telemetry, comment FROM log WHERE id > :id;';
+          			system, status, telemetry, comment FROM log WHERE id >= :id;';
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue(':id', $fromId);
         $stmt->execute();

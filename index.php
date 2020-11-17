@@ -181,9 +181,9 @@
       $sqlite = new SQLiteFetch($pdo);
       $logLines = [];
       foreach ( $sqlite->fetchLog($fromId) as $logLine ) {
-        $logLines[] = $logLine->id . "," . $logLine->channel . "," . $logLine->timestamp . "," . $logLine->source . "," . $logLine->heard . "," . $logLine->audio_level . "," . $logLine->error . "," . $logLine->dti . "," . $logLine->object_name . "," . $logLine->symbol . "," . $logLine->latitude . "," . $logLine->longitude . "," . $logLine->speed . "," . $logLine->course . "," . $logLine->altitude . "," . $logLine->frequency . "," . $logLine->offset . "," . $logLine->tone . "," . $logLine->system . "," . $logLine->status . "," . $logLine->telemetry . "," . $logLine->comment;
+        $logLines[] = json_encode($logLine);
       }
-      echo implode("<br />", $logLines);
+      echo "[" . implode(",", $logLines) . "]";
     });
 
     // Dynamic route: /hello/name

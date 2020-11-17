@@ -51,8 +51,14 @@
   <div class="box">
     <div class="row header"></div>
     <div id="map" class="row content"></div>
-    <div id="log" class="row footer">
-      <p><b>Log</b> (fixed height)</p>
+    <div class="row footer">
+      <table style="width: 100%; color: #1e1;">
+        <thead>
+          <tr><th></th><th>Chan</th><th>Date/Time</th><th>Source</th><th>Heard</th><th>Level</th><th>Error</th><th>DTI</th><th>Obj Name</th><th>Symbol</th><th>Latitude</th><th>Longitude</th><th>Speed</th><th>Course</th><th>Altitude</th><th>Frequency</th><th>Offset</th><th>Tone</th><th>System</th><th>Status</th><th>Telemetry</th><th>Comment</th></tr>
+        </thead>
+        <tbody id="log">
+        </tbody>
+      </table>
     </div>
   </div>
   <script src="app.js"></script>
