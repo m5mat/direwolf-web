@@ -31,11 +31,11 @@ function loadLogs(fromId) {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      lastId = this.responseText.split(",")[0];
-      document.getElementById("log").innerHTML = this.responseText;
+      lastId = parseInt(this.responseText.split(",")[0]);
+      document.getElementById("log").innerHTML += this.responseText;
     }
   };
   xhttp.open("GET", "/log/" + fromId, true);
   xhttp.send();
 }
-setInterval(function(){ loadLogs(lastId); }, 3000);
+setInterval(function(){ loadLogs(1+lastId); }, 3000);
