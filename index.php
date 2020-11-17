@@ -1,7 +1,4 @@
 <?php
-
-
-
     // In case one is using PHP 5.4's built-in server
     $filename = __DIR__ . preg_replace('#(\?.*)$#', '', $_SERVER['REQUEST_URI']);
     if (php_sapi_name() === 'cli-server' && is_file($filename)) {
@@ -126,9 +123,10 @@
       $pdo = (new SQLiteConnection())->connect();
       $sqlite = new SQLiteFetch($pdo);
 
-      echo '<table><tr><th>Channel</th><th>Timestamp</th><th>Source</th><th>Heard</th><th>Audio Level</th><th>Error</th><th>DTI</th><th>Object Name</th><th>Symbol</th><th>Latitude</th><th>Longitude</th><th>Speed</th><th>Course</th><th>Altitude</th><th>Frequency</th><th>Offset</th><th>Tone</th><th>System</th><th>Status</th><th>Telemetry</th><th>Comment</th></tr>';
+      echo '<table><tr><th>ID</th><th>Channel</th><th>Timestamp</th><th>Source</th><th>Heard</th><th>Audio Level</th><th>Error</th><th>DTI</th><th>Object Name</th><th>Symbol</th><th>Latitude</th><th>Longitude</th><th>Speed</th><th>Course</th><th>Altitude</th><th>Frequency</th><th>Offset</th><th>Tone</th><th>System</th><th>Status</th><th>Telemetry</th><th>Comment</th></tr>';
       foreach ( $sqlite->fetchLog() as $log_entry ) {
-	echo "<tr><td>" . $log_entry->channel . "</td>";
+	      echo "<tr><td>" . $log_entry->id . "</td>";
+        echo "<td>" . $log_entry->channel . "</td>";
         echo "<td>" . $log_entry->timestamp . "</td>";
         echo "<td>" . $log_entry->source . "</td>";
         echo "<td>" . $log_entry->heard . "</td>";
@@ -152,6 +150,30 @@
       }
       echo '</table>';
     });
+
+    // Static route: /stations
+    $router->get('/stations', function () {
+      $pdo = (new SQLiteConnection())->connect();
+      $sqlite = new SQLiteFetch($pdo);
+      $stations = [];
+      foreach ( $sqlite->fetchStationList() as $station ) {
+        $stations[] = '{
+                          "type": "Feature",
+                          "geometry": {
+                              "type": "Point",
+                              "coordinates": [' . $station->latitude .', ' . $station->longitude . ']
+                          },
+                          "properties": {
+                              "id": ' . $station->id . ',
+                              "name": "' . $station->source . '",
+                              "symbol": "' . $station->symbol . '"
+                          }
+                        }';
+      }
+      echo "[" . implode ( ",", $stations ) . "]";
+    });
+
+    // Dynamic route: /stations/[min_latitude]/[min_longitude]/[max_latitude]/[max_longitude]
 
     // Static route: /hello
     $router->get('/log', function () {
