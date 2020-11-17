@@ -1,5 +1,7 @@
 <?php
 
+
+
     // In case one is using PHP 5.4's built-in server
     $filename = __DIR__ . preg_replace('#(\?.*)$#', '', $_SERVER['REQUEST_URI']);
     if (php_sapi_name() === 'cli-server' && is_file($filename)) {
@@ -10,9 +12,12 @@
     require __DIR__ . '/vendor/autoload.php';
 
     // Require other useful files
-    require __DIR__ . '/tail.php';
+    // require __DIR__ . '/tail.php';
 
-    use SQLiteConnection;
+    use App\SQLiteConnection as SQLiteConnection;
+    use App\SQLiteCreateTables as SQLiteCreateTables;
+    use App\SQLiteInsert as SQLiteInsert;
+    use App\SQLiteFetch as SQLiteFetch;
 
     // Create a Router
     $router = new \Bramus\Router\Router();
@@ -45,13 +50,107 @@
           </ul>';
     });
 
-    // Static route: /test-db
-    $router->get('/test-db', function () {
-      $pdo = (new SQLiteConnection())->connect();
+    /*
+     * Database Maintenance stuff
+     */
+
+    // Static route: /db-test
+    $router->get('/db-test', function () {
+      $pdo = (new \App\SQLiteConnection())->connect();
       if ($pdo != null)
         echo 'Connected to the SQLite database successfully!';
       else
         echo 'Whoops, could not connect to the SQLite database!';
+    });
+
+    // Static route: /db-initialise
+    $router->get('/db-initialise', function () {
+      $sqlite = new SQLiteCreateTables((new SQLiteConnection())->connect());
+
+      // create new tables
+      $sqlite->createTables();
+
+      // get the table list
+      $tables = $sqlite->getTableList();
+
+      echo "<h3>Tables</h3><ul>";
+      foreach ($tables as $table) {
+        echo "<li>" . $table . "</li>";
+      }
+      echo "</ul>";
+    });
+
+    // Static route: /db-insert
+    // This is only really intended for testing!
+    $router->get('/db-insert', function () {
+      echo "<form action='/db-insert' method='post'>
+		Channel <input type='text' name='channel' /><br />
+                Timestamp <input type='text' name='timestamp' /><br />
+                Source <input type='text' name='source' /><br />
+                Heard <input type='text' name='heard' /><br />
+                Audio Level <input type='text' name='audio_level' /><br />
+                Error <input type='text' name='error' /><br />
+                DTI <input type='text' name='dti' /><br />
+                Object Name <input type='text' name='object_name' /><br />
+                Symbol <input type='text' name='symbol' /><br />
+                Latitude <input type='text' name='latitude' /><br />
+                Longitude <input type='text' name='longitude' /><br />
+                Speed <input type='text' name='speed' /><br />
+                Course <input type='text' name='course' /><br />
+                Altitude <input type='text' name='altitude' /><br />
+                Frequency <input type='text' name='frequency' /><br />
+                Offset <input type='text' name='offset' /><br />
+                Tone <input type='text' name='tone' /><br />
+                System <input type='text' name='system' /><br />
+                Status <input type='text' name='status' /><br />
+                Telemetry <input type='text' name='telemetry' /><br />
+                Comment <input type='text' name='comment' /><br />
+		<input type='submit' />
+            </form>";
+    });
+
+    $router->post('/db-insert', function () {
+      $pdo = (new SQLiteConnection())->connect();
+      $sqlite = new SQLiteInsert($pdo);
+      $sqlite->insertLog(
+	$_POST['channel'], $_POST['timestamp'], $_POST['source'], $_POST['heard'],
+	$_POST['audio_level'], $_POST['error'], $_POST['dti'], $_POST['object_name'],
+	$_POST['symbol'], $_POST['latitude'], $_POST['longitude'], $_POST['speed'],
+	$_POST['course'], $_POST['altitude'], $_POST['frequency'], $_POST['offset'],
+	$_POST['tone'], $_POST['system'], $_POST['status'], $_POST['telemetry'], $_POST['comment']
+      );
+    });
+
+    // Static route: /db-dump
+    $router->get('/db-dump', function () {
+      $pdo = (new SQLiteConnection())->connect();
+      $sqlite = new SQLiteFetch($pdo);
+
+      echo '<table><tr><th>Channel</th><th>Timestamp</th><th>Source</th><th>Heard</th><th>Audio Level</th><th>Error</th><th>DTI</th><th>Object Name</th><th>Symbol</th><th>Latitude</th><th>Longitude</th><th>Speed</th><th>Course</th><th>Altitude</th><th>Frequency</th><th>Offset</th><th>Tone</th><th>System</th><th>Status</th><th>Telemetry</th><th>Comment</th></tr>';
+      foreach ( $sqlite->fetchLog() as $log_entry ) {
+	echo "<tr><td>" . $log_entry->channel . "</td>";
+        echo "<td>" . $log_entry->timestamp . "</td>";
+        echo "<td>" . $log_entry->source . "</td>";
+        echo "<td>" . $log_entry->heard . "</td>";
+        echo "<td>" . $log_entry->audio_level . "</td>";
+        echo "<td>" . $log_entry->error . "</td>";
+        echo "<td>" . $log_entry->dti . "</td>";
+        echo "<td>" . $log_entry->object_name . "</td>";
+        echo "<td>" . $log_entry->symbol . "</td>";
+        echo "<td>" . $log_entry->latitude . "</td>";
+        echo "<td>" . $log_entry->longitude . "</td>";
+        echo "<td>" . $log_entry->speed . "</td>";
+        echo "<td>" . $log_entry->course . "</td>";
+        echo "<td>" . $log_entry->altitude . "</td>";
+        echo "<td>" . $log_entry->frequency . "</td>";
+        echo "<td>" . $log_entry->offset . "</td>";
+        echo "<td>" . $log_entry->tone . "</td>";
+        echo "<td>" . $log_entry->system . "</td>";
+        echo "<td>" . $log_entry->status . "</td>";
+        echo "<td>" . $log_entry->telemetry . "</td>";
+        echo "<td>" . $log_entry->comment . "</td>";
+      }
+      echo '</table>';
     });
 
     // Static route: /hello

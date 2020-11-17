@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => 'b479310f61195ad6ec871e9532bf25585af50d6e',
+    'reference' => '4ab58a10e0a49a3168cac5a97a9722538d5bb6c5',
     'name' => '__root__',
   ),
   'versions' => 
@@ -18,7 +18,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => 'b479310f61195ad6ec871e9532bf25585af50d6e',
+      'reference' => '4ab58a10e0a49a3168cac5a97a9722538d5bb6c5',
     ),
     'bramus/router' => 
     array (
