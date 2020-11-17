@@ -161,7 +161,7 @@
                           "type": "Feature",
                           "geometry": {
                               "type": "Point",
-                              "coordinates": [' . $station->latitude .', ' . $station->longitude . ']
+                              "coordinates": [' . $station->longitude .', ' . $station->latitude . ']
                           },
                           "properties": {
                               "id": ' . $station->id . ',

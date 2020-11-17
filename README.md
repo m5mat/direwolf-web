@@ -6,6 +6,18 @@
  1. Pull in dependencies `composer update` or `php composer.phar update`.
  1. Start the server `./start-server.sh` or `start-server.bat`
 
+## Log Ingesting
+
+### With swatch
+
+Config file:
+
+`watchfor /.*/ exec php insert.php $0`
+
+Start with:
+
+`swatch --config-file=swatch.config --tail-file=/var/log/direwolf/direwolf.log`
+
 ## Log format
 
  1. Radio Channel
