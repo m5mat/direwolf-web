@@ -175,11 +175,15 @@
 
     // Dynamic route: /stations/[min_latitude]/[min_longitude]/[max_latitude]/[max_longitude]
 
-    // Static route: /hello
-    $router->get('/log', function () {
-        echo '
-          <h1>Direwolf Log</h1>
-          <p><em>Log here...</em></p>';
+    // Dynamic route: /log
+    $router->get('/log(/\d)?', function ($fromId = 0) {
+      $pdo = (new SQLiteConnection())->connect();
+      $sqlite = new SQLiteFetch($pdo);
+      $logLines = [];
+      foreach ( $sqlite->fetchLog($fromId) as $logLine ) {
+        $logLines[] = $logLine->id . "," . $logLine->channel . "," . $logLine->timestamp . "," . $logLine->source . "," . $logLine->heard . "," . $logLine->audio_level . "," . $logLine->error . "," . $logLine->dti . "," . $logLine->object_name . "," . $logLine->symbol . "," . $logLine->latitude . "," . $logLine->longitude . "," . $logLine->speed . "," . $logLine->course . "," . $logLine->altitude . "," . $logLine->frequency . "," . $logLine->offset . "," . $logLine->tone . "," . $logLine->system . "," . $logLine->status . "," . $logLine->telemetry . "," . $logLine->comment;
+      }
+      echo implode("<br />", $logLines);
     });
 
     // Dynamic route: /log/num_of_lines

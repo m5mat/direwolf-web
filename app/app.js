@@ -24,3 +24,18 @@ var realtime = L.realtime({
 realtime.on('update', function() {
     map.fitBounds(realtime.getBounds(), {maxZoom: 12});
 });
+
+// Load the logs over AJAX
+var lastId = 0;
+function loadLogs(fromId) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      lastId = this.responseText.split(",")[0];
+      document.getElementById("log").innerHTML = this.responseText;
+    }
+  };
+  xhttp.open("GET", "/log/" + fromId, true);
+  xhttp.send();
+}
+setInterval(function(){ loadLogs(lastId); }, 3000);

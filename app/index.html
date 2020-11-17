@@ -8,12 +8,53 @@
    crossorigin=""></script>
   <script src="leaflet-realtime.min.js"></script>
   <style>
-    body { padding: 0px; margin: 0px }
-    #map { height: 100%; }
+    body { padding: 0px;
+      height: 100%;
+      margin: 0;
+    }
+
+    .box {
+      display: flex;
+      flex-flow: column;
+      height: 100%;
+    }
+
+    .box .row {
+      /* border: 1px dotted grey; */
+    }
+
+    .box .row.header {
+      flex: 0 1 auto;
+      /* The above is shorthand for:
+      flex-grow: 0,
+      flex-shrink: 1,
+      flex-basis: auto
+      */
+    }
+
+    .box .row.content {
+      flex: 1 1 auto;
+    }
+
+    .box .row.footer {
+      flex: 0 1 150px;
+      padding-left: 1em;
+      padding-right: 1em;
+      background-color: #111;
+      color: #1e1;
+      font-family: monospace;
+    }
+
   </style>
 </head>
 <body>
-  <div id="map"></div>
+  <div class="box">
+    <div class="row header"></div>
+    <div id="map" class="row content"></div>
+    <div id="log" class="row footer">
+      <p><b>Log</b> (fixed height)</p>
+    </div>
+  </div>
   <script src="app.js"></script>
 </body>
 </html>

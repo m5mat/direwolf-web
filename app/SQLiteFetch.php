@@ -21,13 +21,15 @@ class SQLiteFetch {
     /**
      *
      */
-    public function fetchLog() {
+    public function fetchLog($fromId) {
         $sql = 'SELECT id, channel, timestamp, source, heard, audio_level,
           			error, dti, object_name, symbol, latitude, longitude,
           			speed, course, altitude, frequency, offset, tone,
-          			system, status, telemetry, comment FROM log;';
-        $stmt = $this->pdo->query($sql);
-
+          			system, status, telemetry, comment FROM log WHERE id > :id;';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':id', $fromId);
+        $stmt->execute();
+        
       	$log_entries = [];
         while ( $row = $stmt->fetchObject() ) {
       	  $log_entries[] = $row;
