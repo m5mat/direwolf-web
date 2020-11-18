@@ -1,2 +1,3 @@
-php -S localhost:8080 -t app/
+#!/bin/#!/usr/bin/env bash
 
+php -S localhost:8080
