@@ -7,6 +7,7 @@
    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
    crossorigin=""></script>
   <script src="leaflet-realtime.min.js"></script>
+  <script src="Marker.Rotate.js"></script>
   <style>
     body { padding: 0px;
       height: 100%;
@@ -40,10 +41,222 @@
       flex: 0 1 150px;
       padding-left: 1em;
       padding-right: 1em;
+      max-height: 200px;
       background-color: #111;
       color: #1e1;
       font-family: monospace;
     }
+
+    .callsign-marker {
+      color: #1e1;
+      background-color: #111;
+      border-width: 0px
+    }
+
+    .aprs-icon-0-0 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: 0 0px; width: 24px; height: 24px; }
+    .aprs-icon-0-1 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -24 0px; width: 24px; height: 24px; }
+    .aprs-icon-0-2 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -48 0px; width: 24px; height: 24px; }
+    .aprs-icon-0-3 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -72 0px; width: 24px; height: 24px; }
+    .aprs-icon-0-4 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -96 0px; width: 24px; height: 24px; }
+    .aprs-icon-0-5 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -120 0px; width: 24px; height: 24px; }
+    .aprs-icon-0-6 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -144 0px; width: 24px; height: 24px; }
+    .aprs-icon-0-7 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -168 0px; width: 24px; height: 24px; }
+    .aprs-icon-0-8 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -192 0px; width: 24px; height: 24px; }
+    .aprs-icon-0-9 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -216 0px; width: 24px; height: 24px; }
+    .aprs-icon-0-10 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -240 0px; width: 24px; height: 24px; }
+    .aprs-icon-0-11 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -264 0px; width: 24px; height: 24px; }
+    .aprs-icon-0-12 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -288 0px; width: 24px; height: 24px; }
+    .aprs-icon-0-13 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -312 0px; width: 24px; height: 24px; }
+    .aprs-icon-0-14 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -336 0px; width: 24px; height: 24px; }
+    .aprs-icon-0-15 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -360 0px; width: 24px; height: 24px; }
+
+    .aprs-icon-0-16 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: 0 120px; width: 24px; height: 24px; }
+    .aprs-icon-0-17 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -24 120px; width: 24px; height: 24px; }
+    .aprs-icon-0-18 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -48 120px; width: 24px; height: 24px; }
+    .aprs-icon-0-19 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -72 120px; width: 24px; height: 24px; }
+    .aprs-icon-0-20 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -96 120px; width: 24px; height: 24px; }
+    .aprs-icon-0-21 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -120 120px; width: 24px; height: 24px; }
+    .aprs-icon-0-22 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -144 120px; width: 24px; height: 24px; }
+    .aprs-icon-0-23 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -168 120px; width: 24px; height: 24px; }
+    .aprs-icon-0-24 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -192 120px; width: 24px; height: 24px; }
+    .aprs-icon-0-25 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -216 120px; width: 24px; height: 24px; }
+    .aprs-icon-0-26 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -240 120px; width: 24px; height: 24px; }
+    .aprs-icon-0-27 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -264 120px; width: 24px; height: 24px; }
+    .aprs-icon-0-28 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -288 120px; width: 24px; height: 24px; }
+    .aprs-icon-0-29 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -312 120px; width: 24px; height: 24px; }
+    .aprs-icon-0-30 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -336 120px; width: 24px; height: 24px; }
+    .aprs-icon-0-31 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -360 120px; width: 24px; height: 24px; }
+
+    .aprs-icon-0-32 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: 0 96px; width: 24px; height: 24px; }
+    .aprs-icon-0-33 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -24 96px; width: 24px; height: 24px; }
+    .aprs-icon-0-34 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -48 96px; width: 24px; height: 24px; }
+    .aprs-icon-0-35 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -72 96px; width: 24px; height: 24px; }
+    .aprs-icon-0-36 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -96 96px; width: 24px; height: 24px; }
+    .aprs-icon-0-37 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -120 96px; width: 24px; height: 24px; }
+    .aprs-icon-0-38 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -144 96px; width: 24px; height: 24px; }
+    .aprs-icon-0-39 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -168 96px; width: 24px; height: 24px; }
+    .aprs-icon-0-40 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -192 96px; width: 24px; height: 24px; }
+    .aprs-icon-0-41 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -216 96px; width: 24px; height: 24px; }
+    .aprs-icon-0-42 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -240 96px; width: 24px; height: 24px; }
+    .aprs-icon-0-43 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -264 96px; width: 24px; height: 24px; }
+    .aprs-icon-0-44 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -288 96px; width: 24px; height: 24px; }
+    .aprs-icon-0-45 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -312 96px; width: 24px; height: 24px; }
+    .aprs-icon-0-46 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -336 96px; width: 24px; height: 24px; }
+    .aprs-icon-0-47 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -360 96px; width: 24px; height: 24px; }
+
+    .aprs-icon-0-48 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: 0 72px; width: 24px; height: 24px; }
+    .aprs-icon-0-49 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -24 72px; width: 24px; height: 24px; }
+    .aprs-icon-0-50 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -48 72px; width: 24px; height: 24px; }
+    .aprs-icon-0-51 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -72 72px; width: 24px; height: 24px; }
+    .aprs-icon-0-52 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -96 72px; width: 24px; height: 24px; }
+    .aprs-icon-0-53 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -120 72px; width: 24px; height: 24px; }
+    .aprs-icon-0-54 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -144 72px; width: 24px; height: 24px; }
+    .aprs-icon-0-55 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -168 72px; width: 24px; height: 24px; }
+    .aprs-icon-0-56 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -192 72px; width: 24px; height: 24px; }
+    .aprs-icon-0-57 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -216 72px; width: 24px; height: 24px; }
+    .aprs-icon-0-58 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -240 72px; width: 24px; height: 24px; }
+    .aprs-icon-0-59 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -264 72px; width: 24px; height: 24px; }
+    .aprs-icon-0-60 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -288 72px; width: 24px; height: 24px; }
+    .aprs-icon-0-61 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -312 72px; width: 24px; height: 24px; }
+    .aprs-icon-0-62 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -336 72px; width: 24px; height: 24px; }
+    .aprs-icon-0-63 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -360 72px; width: 24px; height: 24px; }
+
+    .aprs-icon-0-64 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: 0 48px; width: 24px; height: 24px; }
+    .aprs-icon-0-65 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -24 48px; width: 24px; height: 24px; }
+    .aprs-icon-0-66 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -48 48px; width: 24px; height: 24px; }
+    .aprs-icon-0-67 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -72 48px; width: 24px; height: 24px; }
+    .aprs-icon-0-68 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -96 48px; width: 24px; height: 24px; }
+    .aprs-icon-0-69 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -120 48px; width: 24px; height: 24px; }
+    .aprs-icon-0-70 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -144 48px; width: 24px; height: 24px; }
+    .aprs-icon-0-71 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -168 48px; width: 24px; height: 24px; }
+    .aprs-icon-0-72 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -192 48px; width: 24px; height: 24px; }
+    .aprs-icon-0-73 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -216 48px; width: 24px; height: 24px; }
+    .aprs-icon-0-74 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -240 48px; width: 24px; height: 24px; }
+    .aprs-icon-0-75 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -264 48px; width: 24px; height: 24px; }
+    .aprs-icon-0-76 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -288 48px; width: 24px; height: 24px; }
+    .aprs-icon-0-77 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -312 48px; width: 24px; height: 24px; }
+    .aprs-icon-0-78 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -336 48px; width: 24px; height: 24px; }
+    .aprs-icon-0-79 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -360 48px; width: 24px; height: 24px; }
+
+    .aprs-icon-0-80 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: 0 24px; width: 24px; height: 24px; }
+    .aprs-icon-0-81 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -24 24px; width: 24px; height: 24px; }
+    .aprs-icon-0-82 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -48 24px; width: 24px; height: 24px; }
+    .aprs-icon-0-83 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -72 24px; width: 24px; height: 24px; }
+    .aprs-icon-0-84 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -96 24px; width: 24px; height: 24px; }
+    .aprs-icon-0-85 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -120 24px; width: 24px; height: 24px; }
+    .aprs-icon-0-86 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -144 24px; width: 24px; height: 24px; }
+    .aprs-icon-0-87 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -168 24px; width: 24px; height: 24px; }
+    .aprs-icon-0-88 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -192 24px; width: 24px; height: 24px; }
+    .aprs-icon-0-89 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -216 24x; width: 24px; height: 24px; }
+    .aprs-icon-0-90 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -240 24px; width: 24px; height: 24px; }
+    .aprs-icon-0-91 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -264 24px; width: 24px; height: 24px; }
+    .aprs-icon-0-92 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -288 24px; width: 24px; height: 24px; }
+    .aprs-icon-0-93 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -312 24px; width: 24px; height: 24px; }
+    .aprs-icon-0-94 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -336 24px; width: 24px; height: 24px; }
+    .aprs-icon-0-95 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-0.png'); background-position: -360 24px; width: 24px; height: 24px; }
+
+    .aprs-icon-1-0 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: 0 0px; width: 24px; height: 24px; }
+    .aprs-icon-1-1 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -24 0px; width: 24px; height: 24px; }
+    .aprs-icon-1-2 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -48 0px; width: 24px; height: 24px; }
+    .aprs-icon-1-3 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -72 0px; width: 24px; height: 24px; }
+    .aprs-icon-1-4 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -96 0px; width: 24px; height: 24px; }
+    .aprs-icon-1-5 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -120 0px; width: 24px; height: 24px; }
+    .aprs-icon-1-6 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -144 0px; width: 24px; height: 24px; }
+    .aprs-icon-1-7 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -168 0px; width: 24px; height: 24px; }
+    .aprs-icon-1-8 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -192 0px; width: 24px; height: 24px; }
+    .aprs-icon-1-9 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -216 0px; width: 24px; height: 24px; }
+    .aprs-icon-1-10 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -240 0px; width: 24px; height: 24px; }
+    .aprs-icon-1-11 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -264 0px; width: 24px; height: 24px; }
+    .aprs-icon-1-12 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -288 0px; width: 24px; height: 24px; }
+    .aprs-icon-1-13 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -312 0px; width: 24px; height: 24px; }
+    .aprs-icon-1-14 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -336 0px; width: 24px; height: 24px; }
+    .aprs-icon-1-15 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -360 0px; width: 24px; height: 24px; }
+
+    .aprs-icon-1-16 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: 0 120px; width: 24px; height: 24px; }
+    .aprs-icon-1-17 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -24 120px; width: 24px; height: 24px; }
+    .aprs-icon-1-18 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -48 120px; width: 24px; height: 24px; }
+    .aprs-icon-1-19 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -72 120px; width: 24px; height: 24px; }
+    .aprs-icon-1-20 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -96 120px; width: 24px; height: 24px; }
+    .aprs-icon-1-21 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -120 120px; width: 24px; height: 24px; }
+    .aprs-icon-1-22 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -144 120px; width: 24px; height: 24px; }
+    .aprs-icon-1-23 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -168 120px; width: 24px; height: 24px; }
+    .aprs-icon-1-24 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -192 120px; width: 24px; height: 24px; }
+    .aprs-icon-1-25 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -216 120px; width: 24px; height: 24px; }
+    .aprs-icon-1-26 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -240 120px; width: 24px; height: 24px; }
+    .aprs-icon-1-27 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -264 120px; width: 24px; height: 24px; }
+    .aprs-icon-1-28 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -288 120px; width: 24px; height: 24px; }
+    .aprs-icon-1-29 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -312 120px; width: 24px; height: 24px; }
+    .aprs-icon-1-30 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -336 120px; width: 24px; height: 24px; }
+    .aprs-icon-1-31 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -360 120px; width: 24px; height: 24px; }
+
+    .aprs-icon-1-32 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: 0 96px; width: 24px; height: 24px; }
+    .aprs-icon-1-33 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -24 96px; width: 24px; height: 24px; }
+    .aprs-icon-1-34 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -48 96px; width: 24px; height: 24px; }
+    .aprs-icon-1-35 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -72 96px; width: 24px; height: 24px; }
+    .aprs-icon-1-36 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -96 96px; width: 24px; height: 24px; }
+    .aprs-icon-1-37 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -120 96px; width: 24px; height: 24px; }
+    .aprs-icon-1-38 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -144 96px; width: 24px; height: 24px; }
+    .aprs-icon-1-39 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -168 96px; width: 24px; height: 24px; }
+    .aprs-icon-1-40 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -192 96px; width: 24px; height: 24px; }
+    .aprs-icon-1-41 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -216 96px; width: 24px; height: 24px; }
+    .aprs-icon-1-42 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -240 96px; width: 24px; height: 24px; }
+    .aprs-icon-1-43 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -264 96px; width: 24px; height: 24px; }
+    .aprs-icon-1-44 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -288 96px; width: 24px; height: 24px; }
+    .aprs-icon-1-45 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -312 96px; width: 24px; height: 24px; }
+    .aprs-icon-1-46 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -336 96px; width: 24px; height: 24px; }
+    .aprs-icon-1-47 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -360 96px; width: 24px; height: 24px; }
+
+    .aprs-icon-1-48 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: 0 72px; width: 24px; height: 24px; }
+    .aprs-icon-1-49 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -24 72px; width: 24px; height: 24px; }
+    .aprs-icon-1-50 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -48 72px; width: 24px; height: 24px; }
+    .aprs-icon-1-51 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -72 72px; width: 24px; height: 24px; }
+    .aprs-icon-1-52 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -96 72px; width: 24px; height: 24px; }
+    .aprs-icon-1-53 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -120 72px; width: 24px; height: 24px; }
+    .aprs-icon-1-54 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -144 72px; width: 24px; height: 24px; }
+    .aprs-icon-1-55 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -168 72px; width: 24px; height: 24px; }
+    .aprs-icon-1-56 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -192 72px; width: 24px; height: 24px; }
+    .aprs-icon-1-57 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -216 72px; width: 24px; height: 24px; }
+    .aprs-icon-1-58 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -240 72px; width: 24px; height: 24px; }
+    .aprs-icon-1-59 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -264 72px; width: 24px; height: 24px; }
+    .aprs-icon-1-60 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -288 72px; width: 24px; height: 24px; }
+    .aprs-icon-1-61 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -312 72px; width: 24px; height: 24px; }
+    .aprs-icon-1-62 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -336 72px; width: 24px; height: 24px; }
+    .aprs-icon-1-63 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -360 72px; width: 24px; height: 24px; }
+
+    .aprs-icon-1-64 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: 0 48px; width: 24px; height: 24px; }
+    .aprs-icon-1-65 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -24 48px; width: 24px; height: 24px; }
+    .aprs-icon-1-66 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -48 48px; width: 24px; height: 24px; }
+    .aprs-icon-1-67 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -72 48px; width: 24px; height: 24px; }
+    .aprs-icon-1-68 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -96 48px; width: 24px; height: 24px; }
+    .aprs-icon-1-69 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -120 48px; width: 24px; height: 24px; }
+    .aprs-icon-1-70 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -144 48px; width: 24px; height: 24px; }
+    .aprs-icon-1-71 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -168 48px; width: 24px; height: 24px; }
+    .aprs-icon-1-72 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -192 48px; width: 24px; height: 24px; }
+    .aprs-icon-1-73 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -216 48px; width: 24px; height: 24px; }
+    .aprs-icon-1-74 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -240 48px; width: 24px; height: 24px; }
+    .aprs-icon-1-75 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -264 48px; width: 24px; height: 24px; }
+    .aprs-icon-1-76 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -288 48px; width: 24px; height: 24px; }
+    .aprs-icon-1-77 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -312 48px; width: 24px; height: 24px; }
+    .aprs-icon-1-78 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -336 48px; width: 24px; height: 24px; }
+    .aprs-icon-1-79 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -360 48px; width: 24px; height: 24px; }
+
+    .aprs-icon-1-80 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: 0 24px; width: 24px; height: 24px; }
+    .aprs-icon-1-81 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -24 24px; width: 24px; height: 24px; }
+    .aprs-icon-1-82 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -48 24px; width: 24px; height: 24px; }
+    .aprs-icon-1-83 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -72 24px; width: 24px; height: 24px; }
+    .aprs-icon-1-84 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -96 24px; width: 24px; height: 24px; }
+    .aprs-icon-1-85 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -120 24px; width: 24px; height: 24px; }
+    .aprs-icon-1-86 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -144 24px; width: 24px; height: 24px; }
+    .aprs-icon-1-87 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -168 24px; width: 24px; height: 24px; }
+    .aprs-icon-1-88 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -192 24px; width: 24px; height: 24px; }
+    .aprs-icon-1-89 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -216 24x; width: 24px; height: 24px; }
+    .aprs-icon-1-90 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -240 24px; width: 24px; height: 24px; }
+    .aprs-icon-1-91 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -264 24px; width: 24px; height: 24px; }
+    .aprs-icon-1-92 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -288 24px; width: 24px; height: 24px; }
+    .aprs-icon-1-93 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -312 24px; width: 24px; height: 24px; }
+    .aprs-icon-1-94 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -336 24px; width: 24px; height: 24px; }
+    .aprs-icon-1-95 { background-image: url('/app/aprs-symbols/png/aprs-symbols-24-1.png'); background-position: -360 24px; width: 24px; height: 24px; }
+
 
   </style>
 </head>
@@ -52,7 +265,7 @@
     <div class="row header"></div>
     <div id="map" class="row content"></div>
     <div class="row footer">
-      <table style="width: 100%; color: #1e1;">
+      <table style="width: 100%; color: #1e1; font-size: 10px;">
         <thead>
           <tr><th></th><th>Chan</th><th>Date/Time</th><th>Source</th><th>Heard</th><th>Level</th><th>Error</th><th>DTI</th><th>Obj Name</th><th>Symbol</th><th>Latitude</th><th>Longitude</th><th>Speed</th><th>Course</th><th>Altitude</th><th>Frequency</th><th>Offset</th><th>Tone</th><th>System</th><th>Status</th><th>Telemetry</th><th>Comment</th></tr>
         </thead>

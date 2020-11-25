@@ -29,7 +29,7 @@ class SQLiteFetch {
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue(':id', $fromId);
         $stmt->execute();
-        
+
       	$log_entries = [];
         while ( $row = $stmt->fetchObject() ) {
       	  $log_entries[] = $row;
@@ -42,7 +42,8 @@ class SQLiteFetch {
      *
      */
     public function fetchStationList() {
-        $sql = 'SELECT id, source, latitude, longitude, symbol FROM log;';
+//        $sql = 'SELECT id, source, latitude, longitude, symbol FROM log GROUP BY source ORDER BY timestamp DESC;';
+        $sql = 'SELECT log.id, log.source, log.latitude, log.longitude, log.symbol FROM (SELECT source, MAX(timestamp) AS timestamp FROM log GROUP BY source) AS latest_positions INNER JOIN log ON log.source = latest_positions.source AND log.timestamp = latest_positions.timestamp;';
         $stmt = $this->pdo->query($sql);
 
       	$stations = [];
@@ -53,4 +54,23 @@ class SQLiteFetch {
         return $stations;
     }
 
+    /*
+     * Get the track of a station
+     * defaults to 6 hours
+     */
+    public function fetchTrack($callsign, $max_time = (6 * 60 * 60)) {
+        $sql = "SELECT timestamp, latitude, longitude FROM log WHERE source = :callsign AND timestamp > (strftime('%s', 'now') - :interval) ORDER BY timestamp ASC;";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':callsign', $callsign);
+        $stmt->bindValue(':interval', $max_time);
+        $stmt->execute();
+
+        $log_entries = [];
+        while ( $row = $stmt->fetchObject() ) {
+          $log_entries[] = [ (float)$row->longitude, (float)$row->latitude ];
+        }
+
+        return $log_entries;
+
+    }
 }

@@ -36,14 +36,12 @@
           <h1>bramus/router</h1>
           <p>Try these routes:<p>
           <ul>
-            <li>/test-db</li>
-            <li>/log</li>
-            <li>/blog</li>
-            <li>/blog/<em>year</em></li>
-            <li>/blog/<em>year</em>/<em>month</em></li>
-            <li>/blog/<em>year</em>/<em>month</em>/<em>day</em></li>
-            <li>/movies</li>
-            <li>/movies/<em>id</em></li>
+            <li>/db-test</li>
+            <li>/db-initialise</li>
+            <li>/db-insert</li>
+            <li>/db-dump</li>
+            <li>/stations</li>
+            <li>/track/<em>callsign-ssid</em></li>
           </ul>';
     });
 
@@ -157,18 +155,29 @@
       $sqlite = new SQLiteFetch($pdo);
       $stations = [];
       foreach ( $sqlite->fetchStationList() as $station ) {
+        $track = json_encode($sqlite->fetchTrack($station->source, (24*60*60)));
         $stations[] = '{
-                          "type": "Feature",
-                          "geometry": {
-                              "type": "Point",
-                              "coordinates": [' . $station->longitude .', ' . $station->latitude . ']
-                          },
-                          "properties": {
-                              "id": ' . $station->id . ',
-                              "name": "' . $station->source . '",
-                              "symbol": "' . $station->symbol . '"
-                          }
-                        }';
+                         "type": "Feature",
+                         "geometry": {
+                           "type": "Point",
+                           "coordinates": [' . $station->longitude .', ' . $station->latitude . ']
+                         },
+                         "properties": {
+                           "id": ' . $station->id . ',
+                           "name": "' . $station->source . '",
+                           "symbol": "' . $station->symbol . '"
+                         }
+                       },
+                       {
+                         "type": "Feature",
+                         "geometry": { 
+                           "type": "LineString",
+                           "coordinates": ' . $track . '
+                         },
+                         "properties": {
+                           "name": "' . $station->source . '"
+                         }
+                       }';
       }
       echo "[" . implode ( ",", $stations ) . "]";
     });

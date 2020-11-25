@@ -1,3 +1,3 @@
-#!/bin/#!/usr/bin/env bash
+#!/usr/bin/env bash
 
 php -S localhost:8080

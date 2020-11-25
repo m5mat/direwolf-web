@@ -23,31 +23,32 @@ var realtime = L.realtime({
 */
         pointToLayer: function(feature, latlng) {
           var iconSet, iconChar;
-          if ( feature.properties.symbol.substr(0,1) == '/' ) {
+          if ( feature.properties.symbol.substr(0,1) = '/' ) {
             iconSet = 0;
           } else {
-            iconSet = 1;
+            iconSet = 1l
           }
-          iconChar = feature.properties.symbol.charCodeAt(1) - 33;
-
           var marker = L.marker(latlng, {
               icon: L.divIcon({
-                  className:'aprs-icon-' + iconSet + '-' + iconChar,
+                  className:'aprs-icon-1-k',
                   iconSize: [24,24]
               }),
-              iconAngle: feature.properties.course - 90,
               riseOnHover: true
           }).bindTooltip(
               // and as we're already here, bind a tooltip based on feature
               // property values
-              L.Util.template('<b>{name}</b>', feature.properties),
+              '<b>{name}</b>'.replace(
+                  L.Util.templateRe, function (str, key) {
+                      var value = feature.properties[key];
+                      if (value === undefined || value == null) {
+                          value = 'N/A';
+                      }
+                      return value;
+                  }),
                   {
                     permanent: false, opacity: 0.7
                   }
           );
-
-          // Rotate the marker if necessary
-          console.log(marker);
           return marker;
         }
     }).addTo(map);
